@@ -4,6 +4,11 @@ For the moment, it will just allow you to login, get your latest Host CouchReque
 ##Example##
 See <a href="https://github.com/unRob/CouchSurfing-API/blob/master/example.php">example.php</a>
 
+##Requirements##
+* <a href="http://www.php.net/manual/en/book.apc.php">APC</a> for storing user cookies
+* <a href="http://us.php.net/http">PECL_HTTP</a> For the actual HTTP requests
+
+
 #Roadmap#
 
 * Look for users
