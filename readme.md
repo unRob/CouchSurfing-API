@@ -2,10 +2,11 @@
 For the moment, it will just allow you to login, get your latest Host CouchRequests and see the details of them.
 
 ##Example##
-See example.php
+See <a href="https://github.com/unRob/CouchSurfing-API/blob/master/example.php">example.php</a>
 
 #Roadmap#
-Look for users
-Get user information
-Make CouchRequests
-Reply to CouchRequests
+
+* Look for users
+* Get user information
+* Make CouchRequests
+* Reply to CouchRequests
