@@ -1,9 +1,45 @@
 <?
+/**
+ * Website: https://github.com/unRob/CouchSurfing-API
+ * Acknowledge: Partido Surrealista Mexicano (http://partidosurrealista.com/)
+ * Contributions by:
+ *		None yet
+ *
+ * Licensed under The MIT License
+ * Copyright (c) 2011 Partido Surrealista Mexicano
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * Licensed under The MIT Licenseand associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+ * to whom the Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+ * NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+ * OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @author Roberto Hidalgo <rob@partidosurrealista.com>
+ * @version 0.1 ($Rev: 4 $)
+ * @package Couchsurfing
+ * @subpackage API
+ */
+
+
 require 'simplehtmldom.php';
 class CouchSurfing {
 	
+	//Headers to be sent with each request.
 	public $headers = array('Cookie' => '', 'Accept-Encoding'=> 'compress, gzip');
 	
+	
+	//Basic sanity checks
 	public function __construct($cookie=false)
 	{
 		error_reporting(E_ALL ^ E_NOTICE);
@@ -16,6 +52,15 @@ class CouchSurfing {
 		
 	}
 	
+	
+	/**
+	 * Log into the CouchSurfing.org website
+	 *
+	 * @param	string	$username 
+	 * @param	string	$password 
+	 * @return	string	$cookies
+	 * @author	Roberto Hidalgo
+	 */
 	public function login($username, $password)
 	{
 		$headers = array(
@@ -43,6 +88,13 @@ class CouchSurfing {
 	}
 	
 	
+	/**
+	 * Get a kind of or all recent requests
+	 *
+	 * @param	string	$role 
+	 * @return	array
+	 * @author	Roberto Hidalgo
+	 */
 	public function getRequests($role='host')
 	{
 		$body = self::csrequest('couchmanager/a_get_inbox', array('tab'=>'couchrequest', 'role'=>$role));
@@ -97,6 +149,13 @@ class CouchSurfing {
 	}
 	
 	
+	/**
+	 * Get the details for a specific requet
+	 *
+	 * @param	string	$id 
+	 * @return	array
+	 * @author	Roberto Hidalgo
+	 */
 	public function getRequest($id=FALSE)
 	{
 		if( !$id ){
@@ -177,10 +236,16 @@ class CouchSurfing {
 	}
 	
 	
-	//
-	
-	
-	public function csrequest($url, $encodedData=array())
+	/**
+	 * Requests to CS something that could be, one drunken night, be considered as an unofficial
+	 * API of sorts.
+	 *
+	 * @param	string	$url 
+	 * @param	string	$encodedData 
+	 * @return	string	$body
+	 * @author	Roberto Hidalgo
+	 */
+	private function csrequest($url, $encodedData=array())
 	{
 		list($body, $headers) = self::request($url, "POST", array(
 			'encoded_data' => json_encode($encodedData),
@@ -195,6 +260,16 @@ class CouchSurfing {
 	}
 	
 	
+	/**
+	 * Make an HTTP call
+	 *
+	 * @param	string	$url 
+	 * @param	string	$method 
+	 * @param	string	$data 
+	 * @param	string	$https 
+	 * @return	array
+	 * @author	Roberto Hidalgo
+	 */
 	private function request($url, $method="GET", $data=false, $https=FALSE)
 	{
 		$method = strtoupper($method);
