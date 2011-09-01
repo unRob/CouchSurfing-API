@@ -4,35 +4,23 @@ class CouchSurfing {
 	
 	public $headers = array('Cookie' => '', 'Accept-Encoding'=> 'compress, gzip');
 	
-	public function __construct($username, $password)
+	public function __construct($cookie=false)
 	{
 		error_reporting(E_ALL ^ E_NOTICE);
-		
-		if( !function_exists('apc_store') ){
-			die("APC is required for this to work, please 'sudo pecl install apc'!");
-		}
 		
 		if( !function_exists('http_request') ){
 			die("PECL_HTTP is required for this to work, please 'sudo pecl install http'");
 		}
 		
-		$this->username = $username;
-		$this->password = $password;
-		$loggedin = apc_fetch('cookies');
+		$this->headers['Cookie'] = $cookie;
 		
-		if( $loggedin!==FALSE ){
-			$this->headers['Cookie'] = $loggedin;
-		} else {
-			self::login();
-		}
 	}
 	
-	
-	public function login()
+	public function login($username, $password)
 	{
 		$headers = array(
-			'auth_login[un]' => $this->username,
-			'auth_login[pw]' => $this->password,
+			'auth_login[un]' => $username,
+			'auth_login[pw]' => $password,
 			'auth_login[persistant]' => 'no'
 		);
 		list($body, $headers) = self::request('login.html', "post", $headers, TRUE);
@@ -46,26 +34,27 @@ class CouchSurfing {
 
 
 			$cookies = join("; ", $headers['Set-Cookie']);
-			apc_store('cookies', $cookies, 3600*2);
+			#apc_store('cookies', $cookies, 3600*2);
 			$this->headers['Cookie'] = $cookies;
+			return $cookies;
 		} else {
-			die('Could not login, please check your username ('.$this->username.') and password ('.str_repeat('*', strlen($this->password)).')');
+			return FALSE;
 		}
 	}
 	
 	
-	public static function logout()
+	public function getRequests($role='host')
 	{
-		apc_delete('cookies');
-	}
-	
-	
-	public function getRequests()
-	{
-		$body = self::csrequest('couchmanager/a_get_inbox', array('tab'=>'couchrequest'));
+		$body = self::csrequest('couchmanager/a_get_inbox', array('tab'=>'couchrequest', 'role'=>$role));
 		$doc = str_get_html($body);
+				
+		if( count($doc->find('#no_requests_div'))==1 ){
+			return array();
+		}
+		
 		$trs = $doc->find('tr.request');
 		$requests = array();
+		
 		foreach($trs as $tr){
 			$status = $tr->find('.class_name a');
 			$status = $status[0];
@@ -108,7 +97,7 @@ class CouchSurfing {
 	}
 	
 	
-	public function viewRequest($id=FALSE)
+	public function getRequest($id=FALSE)
 	{
 		if( !$id ){
 			return FALSE;
@@ -145,7 +134,7 @@ class CouchSurfing {
 		);
 		
 		
-		$keys = array('', 'arriving', 'departing', 'people', 'status', 'via');
+		$keys = array('', 'arriving', 'departing', 'people', 'via', 'status');
 		foreach( $basicInfo->find('tr') as $tr ){
 			$request[next($keys)] = trim(strip_tags($tr->find('td', 1)->innertext));
 		}
@@ -186,6 +175,9 @@ class CouchSurfing {
 		
 		return $request;
 	}
+	
+	
+	//
 	
 	
 	public function csrequest($url, $encodedData=array())
