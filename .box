@@ -1,0 +1,4 @@
+php_version: '5.3.6'
+php_extensions: [apc, http, session]
+php_short_open_tag: On
+
