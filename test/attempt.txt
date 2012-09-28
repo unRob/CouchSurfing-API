@@ -1,0 +1,438 @@
+<html>
+  <head>
+      <link href="http://files.couchsurfing.s3.amazonaws.com/mobile/android07_18.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <style>
+  	#load_more{
+  		display: block;
+  		height: 65px;
+  	}
+  	#load_more.loading{
+  		background-image: url('http://www.couchsurfing.com/images/ajax-loader.gif');
+  		background-repeat: no-repeat;
+  		background-position: 50% 50% ;
+	}
+	#load_more.error{
+		color: red;
+	}
+  </style>
+  </head>
+  <body>
+        <div class="result_title"><!-- Members in<br/> -->
+        <span>Vienna, Austria</span>
+    </div>
+    <div class="result_header">
+                    <div>
+                <select name="locations" class="location_selector" ONCHANGE="if(this.options[this.selectedIndex].value != 0){ location = this.options[this.selectedIndex].value; }">
+                    <option value="0">Browse similar locations ▼</option>
+                                        <option value="/msearch?id=3425952&location_type=city&location_label=Vienna%2C+Georgia%2C+United+States&platform=android">
+                            <a href="/msearch?id=3425952&location_type=city&location_label=Vienna%2C+Georgia%2C+United+States&platform=android">Vienna, Georgia, United States</a>
+                        </option>
+                                        <option value="/msearch?id=3529723&location_type=city&location_label=Vienna%2C+Illinois%2C+United+States&platform=android">
+                            <a href="/msearch?id=3529723&location_type=city&location_label=Vienna%2C+Illinois%2C+United+States&platform=android">Vienna, Illinois, United States</a>
+                        </option>
+                                        <option value="/msearch?id=3695291&location_type=city&location_label=Vienna%2C+Maine%2C+United+States&platform=android">
+                            <a href="/msearch?id=3695291&location_type=city&location_label=Vienna%2C+Maine%2C+United+States&platform=android">Vienna, Maine, United States</a>
+                        </option>
+                                        <option value="/msearch?id=2871988&location_type=city&location_label=Vienna%2C+Maryland%2C+United+States&platform=android">
+                            <a href="/msearch?id=2871988&location_type=city&location_label=Vienna%2C+Maryland%2C+United+States&platform=android">Vienna, Maryland, United States</a>
+                        </option>
+                                        <option value="/msearch?id=3793448&location_type=city&location_label=Vienna%2C+Missouri%2C+United+States&platform=android">
+                            <a href="/msearch?id=3793448&location_type=city&location_label=Vienna%2C+Missouri%2C+United+States&platform=android">Vienna, Missouri, United States</a>
+                        </option>
+                                        <option value="/msearch?id=3987947&location_type=city&location_label=Vienna%2C+New+Jersey%2C+United+States&platform=android">
+                            <a href="/msearch?id=3987947&location_type=city&location_label=Vienna%2C+New+Jersey%2C+United+States&platform=android">Vienna, New Jersey, United States</a>
+                        </option>
+                                        <option value="/msearch?id=4086478&location_type=city&location_label=Vienna%2C+New+York%2C+United+States&platform=android">
+                            <a href="/msearch?id=4086478&location_type=city&location_label=Vienna%2C+New+York%2C+United+States&platform=android">Vienna, New York, United States</a>
+                        </option>
+                                        <option value="/msearch?id=4133549&location_type=city&location_label=Vienna%2C+Ohio%2C+United+States&platform=android">
+                            <a href="/msearch?id=4133549&location_type=city&location_label=Vienna%2C+Ohio%2C+United+States&platform=android">Vienna, Ohio, United States</a>
+                        </option>
+                                        <option value="/msearch?id=4300402&location_type=city&location_label=Vienna%2C+South+Dakota%2C+United+States&platform=android">
+                            <a href="/msearch?id=4300402&location_type=city&location_label=Vienna%2C+South+Dakota%2C+United+States&platform=android">Vienna, South Dakota, United States</a>
+                        </option>
+                                        <option value="/msearch?id=5000778&location_type=city&location_label=Vienna%2C+Vienna%2C+Austria&platform=android">
+                            <a href="/msearch?id=5000778&location_type=city&location_label=Vienna%2C+Vienna%2C+Austria&platform=android">Vienna, Vienna, Austria</a>
+                        </option>
+                                        <option value="/msearch?id=4488496&location_type=city&location_label=Vienna%2C+Virginia%2C+United+States&platform=android">
+                            <a href="/msearch?id=4488496&location_type=city&location_label=Vienna%2C+Virginia%2C+United+States&platform=android">Vienna, Virginia, United States</a>
+                        </option>
+                                        <option value="/msearch?id=4586308&location_type=city&location_label=Vienna%2C+West+Virginia%2C+United+States&platform=android">
+                            <a href="/msearch?id=4586308&location_type=city&location_label=Vienna%2C+West+Virginia%2C+United+States&platform=android">Vienna, West Virginia, United States</a>
+                        </option>
+                                        <option value="/msearch?id=6241387&location_type=city&location_label=Viennay%2C+Poitou-Charentes%2C+France&platform=android">
+                            <a href="/msearch?id=6241387&location_type=city&location_label=Viennay%2C+Poitou-Charentes%2C+France&platform=android">Viennay, Poitou-Charentes, France</a>
+                        </option>
+                                </select>
+            </div>
+        
+            </div>
+        
+    <section class="results">
+      <ul>
+        <li class="results_container">
+                
+    <article rel="1NEDR9U" class="person couch-Y">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/248511" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/1NEDR9U/4358823_m_8a5587b577d71e43a60ebf39b2c056e5.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/1NEDR9U/4358823_m_8a5587b577d71e43a60ebf39b2c056e5.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Franz Hitzenberger</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusyes">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    4                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    3                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="FM4EEGA" class="person couch-M">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/2327751" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/FM4EEGA/8942733_m_dccbf9a7d9456d8cd06eaa061921a2a2.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/FM4EEGA/8942733_m_dccbf9a7d9456d8cd06eaa061921a2a2.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Danijel Nikolic</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusmaybe">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    0                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    0                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="1RC8LS5" class="person couch-M">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/265268" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/1RC8LS5/1349973_m_336d71b421e57bdf82df94e9746f3ab8.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/1RC8LS5/1349973_m_336d71b421e57bdf82df94e9746f3ab8.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Christian Franke</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusmaybe">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    1                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    1                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="UTTI4VF" class="person couch-Y">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/4594200" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/UTTI4VF/15258827_m_999eb79b1ecabd36c15d4de41f02267e.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/UTTI4VF/15258827_m_999eb79b1ecabd36c15d4de41f02267e.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Heidi Brandauer</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusyes">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    0                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    0                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="QMIDDJF" class="person couch-Y">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/3967434" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/QMIDDJF/15907169_m_89a9365d94a5459e8bc882e656486c07.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/QMIDDJF/15907169_m_89a9365d94a5459e8bc882e656486c07.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Sandro Illitsch</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusyes">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    3                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    3                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="WBLLMD0" class="person couch-Y">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/4814474" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/WBLLMD0/15808257_m_5685ebe8f0c20bd01b1302fa1362e5fd.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/WBLLMD0/15808257_m_5685ebe8f0c20bd01b1302fa1362e5fd.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>AutNureldinVienna</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusyes">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    0                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    0                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="E02JA9K" class="person couch-M">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/2085018" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/E02JA9K/9324298_m_ce67c36ba279bd9dc6516cede9524719.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/E02JA9K/9324298_m_ce67c36ba279bd9dc6516cede9524719.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>JEBISU</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusmaybe">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    16                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    15                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="DCIQOFP" class="person couch-M">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/1989135" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/DCIQOFP/15756121_m_9e7d98374d2463c85493cd5ba4cdcf4f.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/DCIQOFP/15756121_m_9e7d98374d2463c85493cd5ba4cdcf4f.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Manuel Lutz</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusmaybe">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    0                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    0                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="27JSC7U" class="person couch-Y">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/330005" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/27JSC7U/14224428_m_fe1b318d9ea8536e3ae76b9c767bf94e.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/27JSC7U/14224428_m_fe1b318d9ea8536e3ae76b9c767bf94e.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Florian Schmiedecker</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusyes">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    16                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    20                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+    
+    <article rel="X28MSLF" class="person couch-M">
+      <a href="cs://Users?id=https://api.couchsurfing.org/users/4923515" class="profile-link"></a>
+      
+      <div class="profile-image" style="background-image: url(http://s3.amazonaws.com/images.couchsurfing.us/X28MSLF/16272150_m_829217f19a16acda29a4402eb81cc940.jpg);">
+        <img src="http://s3.amazonaws.com/images.couchsurfing.us/X28MSLF/16272150_m_829217f19a16acda29a4402eb81cc940.jpg" />
+      </div>
+
+      <section class="basics">
+        <h2>Dalia Amalia</h2>
+        <div class="location">Vienna, Austria</div>
+        <ul class="statistics">
+            <li class="couchstatus">
+                <div class="status_icon couchstatusmaybe">
+                
+                </div>
+            </li>
+            <li class="friends">
+                <span class="num">
+                    5                </span> Friends
+            </li>
+            <li class="references">
+                <span class="num">
+                    6                </span> Ref
+            </li>
+        </ul>
+      </section>
+    </article>
+
+        </li>
+      </ul>
+    </section>
+
+    <section class="pagination">
+
+        <button id="load_more" style="display:none">Load more</button>
+
+    </section>
+
+    <script>
+
+        var current_page = 1;
+        var total_pages  = 478;
+        var exclude_ids = [];
+        var original_button_txt = $("#load_more").html();
+
+        if( total_pages > current_page) {
+            $("#load_more").show();
+        }
+
+        function restoreButton(button,button_txt){
+            addListener();
+            button.html(button_txt);
+            button.removeClass('loading');
+        }
+
+        function addListener(){
+
+            $("#load_more").on('click.loadMore',function(){
+
+                var button = $(this);
+                var button_txt = original_button_txt;
+
+                button.addClass('loading');
+                button.removeClass("error");
+                button.html('');
+
+                button.off('click.loadMore');
+
+                current_page++;
+
+                if( current_page == total_pages ){
+                    $("#load_more").hide();
+                }
+                
+                $(".person").each(function(index, element){
+                    exclude_ids.push($(element).attr('rel'));
+                });
+
+                $.ajax({
+                    url: "/msearch?platform=android&location=vienna&member-type=host&language=en", 
+                    data: { page: current_page, exclude_ids: exclude_ids} ,
+                    success: function(data){
+                        $(".results_container").append(data);
+                        restoreButton(button,button_txt);
+                    },
+                    timeout: 30000, //30 seconds
+                    error: function(){
+                        button.addClass("error");
+                        restoreButton(button,'Network error, please try again.');
+                    }
+                });
+
+            });
+
+        }
+
+        addListener();
+    </script>
+    
+      </body>
+</html>

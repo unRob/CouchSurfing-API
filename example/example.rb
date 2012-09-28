@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require './csapi.rb'
+require '../lib/csapi.rb'
 
 begin
   api = CS.new('username','password')
 rescue CS::AuthError
   puts "Incorrect username or password"
-  exit;
+  exit
 end
 
 # ===
@@ -39,6 +39,7 @@ requests = api.requests(limit)
 # ===
 # Create a new Couch Request
 # ===
+=begin
 details = {
   subject: 'This is my request subject',
   number: 1, #How much people travel with you
@@ -51,6 +52,7 @@ details = {
   message: 'This is my request message' #I've yet to figure out how to do the multi-part requests
 }
 couch_request = CS::Request.new(details)
+=end
 
 #api.requests(1).each do |key, value|
 #  pp value
