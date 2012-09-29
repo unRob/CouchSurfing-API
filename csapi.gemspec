@@ -9,7 +9,7 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = false
   s.extra_rdoc_files = Dir['[A-Z]*']
   s.authors = ["Roberto Hidalgo", "Peter Nosko"]
-  s.email = "rob@unrob.com, peter.nosko@gmail.com"
+  s.email = "rob@unrob.com; peter.nosko@gmail.com"
   s.homepage = "http://unrob.com"
 
   # Manifest

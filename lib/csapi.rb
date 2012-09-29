@@ -9,7 +9,7 @@ Copyright (c) 2012 Partido Surrealista Mexicano
 
 require 'httparty'
 require 'json'
-require_relative 'search_helper'
+require 'nokogiri'
 
 class CS
   include HTTParty
@@ -29,7 +29,7 @@ class CS
     end
     data = JSON.parse r.body
     @uid = data['url'].gsub(/[^\d]/, '')
-    @profile = data.keep_if { |k, v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k) }
+    @profile = data.keep_if {|k,v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k)}
     @profile['uid'] = @uid
     self.class.headers 'Cookie' => @cookies
     @@instance = self
@@ -90,10 +90,32 @@ class CS
   end
 
   def search(options)
-    helper = SearchHelper.new()
-    url = helper.get_url(options)
-    html_result = self.class.get(url)
-    helper.parse(html_result)
+    options[:platform] = "android"
+    parse(self.class.get(url, options))
+  end
+
+  def parse(html_string, &block)
+    doc = Nokogiri::HTML(html_string)
+
+    if block_given? then
+      parse_document(doc, &block)
+    else
+      list = []
+      parse_document(doc) do |res|
+        list << res
+      end
+      list
+    end
+  end
+
+  def parse_document(doc)
+    doc.xpath('//article').each do |article|
+      couch = /person couch-([A-Z])/.match(article["class"])[1]
+      id = %r".*users/([0-9]+)".match(article.children.at_css("a.profile-link").attr("href"))[1]
+      location = article.children.at_css("div.location").content
+      name = article.children.at_css("h2").content
+      yield({"id" => id, "name" => name, "couch" => couch, "location" => location})
+    end
   end
 
   class AuthError < StandardError
