@@ -20,7 +20,7 @@ class CS
 
   def initialize(username, password)
     @username = username
-    r = self.class.post('/sessions', body: {username: username, password: password}.to_json)
+    r = self.class.post('/sessions', body:{username: username, password: password}.to_json)
     raise CS::AuthError.new("Could not login") if r.code != 200
     @cookies = []
     r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|
@@ -44,7 +44,7 @@ class CS
     q = {
         limit: limit
     }
-    r = self.class.get(url, query: q)
+    r = self.class.get(url, query:q)
     requests = {}
     response = JSON.parse r.body
     response['object'].each do |req|
@@ -90,7 +90,7 @@ class CS
   end
 
   def search(options)
-    # options= {:platform => 'android' }.merge(options)
+    options = {:platform => 'android' }.merge(options)
     parse(self.class.get('/msearch', :query => options))
   end
 
@@ -153,14 +153,11 @@ class CS
       #puts options.to_json
 
       url = "/couchrequests"
-      api.post(url, body: options.to_json)
+      api.post(url, body:options.to_json)
 
       #pp response.code
       #pp response.body
 
     end
-
-
   end
-
 end

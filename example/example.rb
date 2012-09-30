@@ -61,7 +61,7 @@ couch_request = CS::Request.new(details)
 # ===
 #   Search for people in a city with various search constraints
 # ===
-options = { :platform => 'android', :location => 'venice', :gender => 'female', :'has-photo' => true, :'member-type' => 'host' , :vouched => nil, :verified => nil, :network => nil, :'min-age' => nil, :'max-age' => nil }
+options = {:location => 'venice', :gender => 'female', :'has-photo' => true, :'member-type' => 'host' , :vouched => nil, :verified => nil, :network => nil, :'min-age' => nil, :'max-age' => nil}
 hits = api.search(options)
 hits.each do |hit|
   print hit
