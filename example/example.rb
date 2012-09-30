@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require '../lib/csapi.rb'
+require_relative '../lib/csapi'
 
 begin
   api = CS.new('username','password')
@@ -42,7 +42,7 @@ requests = api.requests(limit)
 =begin
 details = {
   subject: 'This is my request subject',
-  number: 1, #How much people travel with you
+  number: 1, #How many people travel with you
   arrival: 1339543920, #a Unix Timestamp with your arrival date
   departure: 1339643920, #a Unix Timestamp with your departure date
   arrival_flexible: true,
@@ -61,5 +61,9 @@ couch_request = CS::Request.new(details)
 # ===
 #   Search for people in a city with various search constraints
 # ===
-options = {:city => 'venice', :gender => nil, :has-photo => true, :member-type => 'host', :vouched => nil, :verified => nil, :network => nil, :min-age => nil, :max-age => nil}
+options = { :platform => 'android', :location => 'venice', :gender => 'female', :'has-photo' => true, :'member-type' => 'host' , :vouched => nil, :verified => nil, :network => nil, :'min-age' => nil, :'max-age' => nil }
 hits = api.search(options)
+hits.each do |hit|
+  print hit
+  print "\r\n"
+end

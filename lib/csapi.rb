@@ -90,8 +90,8 @@ class CS
   end
 
   def search(options)
-    options[:platform] = "android"
-    parse(self.class.get(url, options))
+    # options= {:platform => 'android' }.merge(options)
+    parse(self.class.get('/msearch', :query => options))
   end
 
   def parse(html_string, &block)
