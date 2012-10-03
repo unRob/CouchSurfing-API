@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require './csapi.rb'
+require_relative '../lib/csapi'
 
 begin
   api = CS.new('username','password')
 rescue CS::AuthError
   puts "Incorrect username or password"
-  exit;
+  exit
 end
 
 # ===
@@ -39,9 +39,10 @@ requests = api.requests(limit)
 # ===
 # Create a new Couch Request
 # ===
+=begin
 details = {
   subject: 'This is my request subject',
-  number: 1, #How much people travel with you
+  number: 1, #How many people travel with you
   arrival: 1339543920, #a Unix Timestamp with your arrival date
   departure: 1339643920, #a Unix Timestamp with your departure date
   arrival_flexible: true,
@@ -51,7 +52,18 @@ details = {
   message: 'This is my request message' #I've yet to figure out how to do the multi-part requests
 }
 couch_request = CS::Request.new(details)
+=end
 
 #api.requests(1).each do |key, value|
 #  pp value
 #end
+
+# ===
+#   Search for people in a city with various search constraints
+# ===
+options = {:location => 'venice', :gender => 'female', :'has-photo' => true, :'member-type' => 'host' , :vouched => nil, :verified => nil, :network => nil, :'min-age' => nil, :'max-age' => nil}
+hits = api.search(options)
+hits.each do |hit|
+  print hit
+  print "\r\n"
+end
