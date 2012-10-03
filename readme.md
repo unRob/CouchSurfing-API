@@ -14,7 +14,7 @@ See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/examples/
 
 As a gem:
 
-	gem install csapi
+	gem install CSApi
 	
 Or by hand:
 

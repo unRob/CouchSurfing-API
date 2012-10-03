@@ -10,124 +10,130 @@ Copyright (c) 2012 Partido Surrealista Mexicano
 require 'httparty'
 require 'json'
 require 'nokogiri'
-
-class CS
-  include HTTParty
-  base_uri 'https://api.couchsurfing.org'
-  headers "Content-Type" => 'application/json'
-  follow_redirects false
-  @uid = '0'
-
-  def initialize(username, password)
-    @username = username
-    r = self.class.post('/sessions', body:{username: username, password: password}.to_json)
-    raise CS::AuthError.new("Could not login") if r.code != 200
-    @cookies = []
-    r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|
-      key, value = cookie.split(';')[0].split('=')
-      @cookies = "#{key}=#{value}"
-    end
-    data = JSON.parse r.body
-    @uid = data['url'].gsub(/[^\d]/, '')
-    @profile = data.keep_if {|k,v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k)}
-    @profile['uid'] = @uid
-    self.class.headers 'Cookie' => @cookies
-    @@instance = self
-  end
-
-  def CS::instance
-    @@instance
-  end
-
-  def requests(limit=10)
-    url = "/users/#{@uid}/couchrequests"
-    q = {
-        limit: limit
-    }
-    r = self.class.get(url, query:q)
-    requests = {}
-    response = JSON.parse r.body
-    response['object'].each do |req|
-      key = req.gsub(/[^\d]/, '')
-      requests[key] = self.request(key)
-    end
-    requests
-  end
-
-
-  def request(id)
-    url = "/couchrequests/#{id}"
-    r = self.class.get(url)
-    JSON.parse r.body
-  end
-
-  def userdata
-    @profile
-  end
-
-  def profile(user=@uid)
-    url = "/users/#{user}/profile"
-    r = self.class.get(url)
-    JSON.parse r.body
-  end
-
-  def photos(user=@uid)
-    url = "/users/#{user}/photos"
-    r = self.class.get(url)
-    JSON.parse r.body
-  end
-
-  def friends(user=@uid)
-    url = "/users/#{user}/friends"
-    r = self.class.get(url)
-    JSON.parse r.body
-  end
-
-  def references(user=@uid)
-    url = "/users/#{user}/references"
-    r = self.class.get(url)
-    JSON.parse r.body
-  end
-
-  def search(options)
+module CS
     
-    defaults = {
-      location: nil,
-      gender: nil,
-      :'has-photo' => nil,
-      :'member-type' => 'host' ,
-      vouched: nil,
-      verified: nil,
-      network: nil,
-      :'min-age' => nil,
-      :'max-age' => nil,
-      :platform => 'android'
-    }
-    
-    options = defaults.merge(options)
-    html = self.class.get('/msearch', :query => options)
-    doc = Nokogiri::HTML(html);
-    users = {}
-    statuses = {
-      'M' => 'maybe',
-      'T' => 'travelling',
-      'Y' => 'available',
-      'N' => 'unavailable'
-    }
-    doc.xpath('//article').each do |article|
-      id = article.at_css('a').attr('href').split('/').last
-      user = {
-        name: article.children.at_css("h2").content,
-        location: article.children.at_css("div.location").content,
-        status: statuses[article['class'].match(/couch-([A-Z])/)[1]],
-        pic: article.at_css('img').attr('src')
+  class Api
+    include HTTParty
+    base_uri 'https://api.couchsurfing.org'
+    headers "Content-Type" => 'application/json'
+    follow_redirects false
+    @uid = '0'
+
+    def initialize(username, password)
+      @username = username
+      r = self.class.post('/sessions', body:{username: username, password: password}.to_json)
+      
+      raise CS::AuthError.new("Could not login") if r.code != 200
+      
+      @cookies = []
+      r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|
+        key, value = cookie.split(';')[0].split('=')
+        @cookies = "#{key}=#{value}"
+      end
+      
+      data = JSON.parse r.body
+      @uid = data['url'].gsub(/[^\d]/, '')
+      @profile = data.keep_if {|k,v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k)}
+      @profile['uid'] = @uid
+      self.class.headers 'Cookie' => @cookies
+      @@instance = self
+    end
+
+    def CS::instance
+      @@instance
+    end
+
+    def requests(limit=10)
+      url = "/users/#{@uid}/couchrequests"
+      q = {
+          limit: limit
       }
-      users[id] = user
+      r = self.class.get(url, query:q)
+      requests = {}
+      response = JSON.parse r.body
+      response['object'].each do |req|
+        key = req.gsub(/[^\d]/, '')
+        requests[key] = self.request(key)
+      end
+      requests
     end
-    
-    users;
-  end
 
+
+    def request(id)
+      url = "/couchrequests/#{id}"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+
+    def userdata
+      @profile
+    end
+
+    def profile(user=@uid)
+      url = "/users/#{user}/profile"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+
+    def photos(user=@uid)
+      url = "/users/#{user}/photos"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+
+    def friends(user=@uid)
+      url = "/users/#{user}/friends"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+
+    def references(user=@uid)
+      url = "/users/#{user}/references"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+
+    def search(options)
+    
+      defaults = {
+        location: nil,
+        gender: nil,
+        :'has-photo' => nil,
+        :'member-type' => 'host' ,
+        vouched: nil,
+        verified: nil,
+        network: nil,
+        :'min-age' => nil,
+        :'max-age' => nil,
+        :platform => 'android'
+      }
+    
+      options = defaults.merge(options)
+      html = self.class.get('/msearch', :query => options)
+      doc = Nokogiri::HTML(html);
+      users = {}
+      statuses = {
+        'M' => 'maybe',
+        'T' => 'travelling',
+        'Y' => 'available',
+        'N' => 'unavailable'
+      }
+      doc.xpath('//article').each do |article|
+        id = article.at_css('a').attr('href').split('/').last
+        user = {
+          name: article.children.at_css("h2").content,
+          location: article.children.at_css("div.location").content,
+          status: statuses[article['class'].match(/couch-([A-Z])/)[1]],
+          pic: article.at_css('img').attr('src')
+        }
+        users[id] = user
+      end
+    
+      users;
+    end
+  end
+  
+  
   class AuthError < StandardError
   end
 
@@ -170,4 +176,5 @@ class CS
 
     end
   end
+  
 end

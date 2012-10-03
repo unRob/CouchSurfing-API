@@ -4,7 +4,7 @@
 require_relative '../lib/csapi'
 
 begin
-  api = CS.new('username','password')
+  api = CS::Api.new('username','password')
 rescue CS::AuthError
   puts "Incorrect username or password"
   exit
@@ -15,6 +15,7 @@ end
 # ===
 profile = api.profile('205974')
 
+exit;
 # ===
 # Get a user's photos, by default ours
 # ===
@@ -39,7 +40,6 @@ requests = api.requests(limit)
 # ===
 # Create a new Couch Request
 # ===
-=begin
 details = {
   subject: 'This is my request subject',
   number: 1, #How many people travel with you
@@ -52,7 +52,6 @@ details = {
   message: 'This is my request message' #I've yet to figure out how to do the multi-part requests
 }
 couch_request = CS::Request.new(details)
-=end
 
 #api.requests(1).each do |key, value|
 #  pp value
