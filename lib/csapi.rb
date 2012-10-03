@@ -7,125 +7,148 @@ Licensed under The MIT License
 Copyright (c) 2012 Partido Surrealista Mexicano  
 =end
 
-require_relative 'csapi/version'
 require 'httparty'
-require 'nokogiri'
 require 'json'
+require 'nokogiri'
 
-module CS
+class CS
+  include HTTParty
+  base_uri 'https://api.couchsurfing.org'
+  headers "Content-Type" => 'application/json'
+  follow_redirects false
+  @uid = '0'
 
-  class Api
-    include HTTParty
-    base_uri 'https://api.couchsurfing.org'
-    headers "Content-Type" => 'application/json'
-    follow_redirects false
-    @uid = '0'
-  
-  
-    def initialize(username, password)
-      @username = username;
-      r = self.class.post('/sessions', body:{username:username, password:password}.to_json)
-      raise CS::AuthError.new("Could not login") if r.code != 200
-      @cookies = []
-      r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|;
-        key,value = cookie.split(';')[0].split('=')
-        @cookies = "#{key}=#{value}";
-      end
-      data = JSON.parse r.body
-      @uid = data['url'].gsub(/[^\d]/, '')
-      @profile = data.keep_if {|k,v| ['realname','username','profile_image','gender','address'].include?(k)}   
-      @profile['uid'] = @uid
-      self.class.headers 'Cookie' => @cookies
-      @@instance = self
+  def initialize(username, password)
+    @username = username
+    r = self.class.post('/sessions', body:{username: username, password: password}.to_json)
+    raise CS::AuthError.new("Could not login") if r.code != 200
+    @cookies = []
+    r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|
+      key, value = cookie.split(';')[0].split('=')
+      @cookies = "#{key}=#{value}"
     end
-
-
-    def Api::instance
-      @@instance
-    end
-  
-  
-    def requests(limit=10, options)
-      url = "/users/#{@uid}/couchrequests"
-      q = {
-        limit: limit
-      }.merge(options)
-      r = self.class.get(url,query:q)
-      requests = {}
-      response = JSON.parse r.body
-      response['object'].each do |req|
-        key = req.gsub(/[^\d]/, '')
-        requests[key] = self.request(key)
-      end
-      requests
-    end
-  
-  
-    def search()
-      url = "/search"
-      r = self.class.post(url)
-      JSON.parse r.body
-    end  
-  
-  
-    def request(id)
-      url = "/couchrequests/#{id}"
-      r = self.class.get(url)
-      JSON.parse r.body
-    end
-  
-  
-    def userdata
-      @profile
-    end
-  
-  
-    def profile(user=@uid)
-      url = "/users/#{user}"
-      r = self.class.get(url)
-      JSON.parse r.body
-    end
-  
-  
-    def photos(user=@uid)
-      url = "/users/#{user}/photos"
-      r = self.class.get(url)
-      JSON.parse r.body
-    end
-  
-  
-    def friends(user=@uid)
-      url = "/users/#{user}/friends"
-      r = self.class.get(url)
-      JSON.parse r.body
-    end
-  
-  
-    def references(user=@uid)
-      url = "/users/#{user}/references"
-      r = self.class.get(url)
-      JSON.parse r.body
-    end
-  
-  
+    data = JSON.parse r.body
+    @uid = data['url'].gsub(/[^\d]/, '')
+    @profile = data.keep_if {|k,v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k)}
+    @profile['uid'] = @uid
+    self.class.headers 'Cookie' => @cookies
+    @@instance = self
   end
-  
-  class HTTPRequest
-    @api = nil
+
+  def CS::instance
+    @@instance
+  end
+
+  def requests(limit=10)
+    url = "/users/#{@uid}/couchrequests"
+    q = {
+        limit: limit
+    }
+    r = self.class.get(url, query:q)
+    requests = {}
+    response = JSON.parse r.body
+    response['object'].each do |req|
+      key = req.gsub(/[^\d]/, '')
+      requests[key] = self.request(key)
+    end
+    requests
+  end
+
+
+  def request(id)
+    url = "/couchrequests/#{id}"
+    r = self.class.get(url)
+    JSON.parse r.body
+  end
+
+  def userdata
+    @profile
+  end
+
+  def profile(user=@uid)
+    url = "/users/#{user}/profile"
+    r = self.class.get(url)
+    JSON.parse r.body
+  end
+
+  def photos(user=@uid)
+    url = "/users/#{user}/photos"
+    r = self.class.get(url)
+    JSON.parse r.body
+  end
+
+  def friends(user=@uid)
+    url = "/users/#{user}/friends"
+    r = self.class.get(url)
+    JSON.parse r.body
+  end
+
+  def references(user=@uid)
+    url = "/users/#{user}/references"
+    r = self.class.get(url)
+    JSON.parse r.body
+  end
+
+  def search(options)
     
+    defaults = {
+      location: nil,
+      gender: nil,
+      :'has-photo' => nil,
+      :'member-type' => 'host' ,
+      vouched: nil,
+      verified: nil,
+      network: nil,
+      :'min-age' => nil,
+      :'max-age' => nil,
+      :platform => 'android'
+    }
+    
+    options = defaults.merge(options)
+    html = self.class.get('/msearch', :query => options)
+    doc = Nokogiri::HTML(html);
+    users = {}
+    statuses = {
+      'M' => 'maybe',
+      'T' => 'travelling',
+      'Y' => 'available',
+      'N' => 'unavailable'
+    }
+    doc.xpath('//article').each do |article|
+      id = article.at_css('a').attr('href').split('/').last
+      user = {
+        name: article.children.at_css("h2").content,
+        location: article.children.at_css("div.location").content,
+        status: statuses[article['class'].match(/couch-([A-Z])/)[1]],
+        pic: article.at_css('img').attr('src')
+      }
+      users[id] = user
+    end
+    
+    users;
+  end
+
+  class AuthError < StandardError
+  end
+
+  class APIError < StandardError
+  end
+
+  class Request
+    @api = nil
+
     def initialize(options={})
-      api = nil
       if options[:username] && options[:password]
-        api = CS::Api.new(options[:username], options[:password])
+        api = CS.new(options[:username], options[:password])
         options.del(:username)
         options.del(:password)
       else
-        api = CS::Api::instance
+        api = CS::instance
         if api==nil
           raise CS::APIError('You have not authenticated with the service or did not provide a :username and :password')
         end
       end
-      
+
       #pp api.userdata
       options[:subject] = options[:subject] || "#{api.userdata['realname']} from #{api.userdata['address']['country']} sent you a new CouchRequest!"
       options[:number] = options[:number] || 1
@@ -138,21 +161,13 @@ module CS
       options[:departure] = Time.at(options[:departure]).strftime("%FT%TZ") || (Time.now()+86400*3).strftime("%FT%TZ")
       options[:message] = options[:message] || "I'm to lazy to write a proper couch request. HOST ME PLZ?"
       #puts options.to_json
-      
+
       url = "/couchrequests"
-      response = api.post(url, body:options.to_json)
-      
+      api.post(url, body:options.to_json)
+
       #pp response.code
       #pp response.body
-      
+
     end
   end
-  
-  class AuthError < StandardError
-  end
-  
-  class APIError < StandardError
-  end
-  
-  
 end

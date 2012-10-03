@@ -1,19 +1,19 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require './csapi.rb'
+require_relative '../lib/csapi'
 
 begin
-  api = CS.new('unrob','calcetin')
+  api = CS.new('username','password')
 rescue CS::AuthError
   puts "Incorrect username or password"
-  exit;
+  exit
 end
 
 # ===
 # Get a user's info, by default ours
 # ===
-profile = api.profile()
+profile = api.profile('205974')
 
 # ===
 # Get a user's photos, by default ours
@@ -34,17 +34,15 @@ references = api.references('205974')
 # Get the current user's recent requests
 # ===
 limit = 10
-options = {
-  after: 'couchrequest_id', #return only requests with an id smaller than this one
-}
-requests = api.requests(limit, options)
+requests = api.requests(limit)
 
 # ===
 # Create a new Couch Request
 # ===
+=begin
 details = {
   subject: 'This is my request subject',
-  number: 1, #How much people travel with you
+  number: 1, #How many people travel with you
   arrival: 1339543920, #a Unix Timestamp with your arrival date
   departure: 1339643920, #a Unix Timestamp with your departure date
   arrival_flexible: true,
@@ -54,7 +52,27 @@ details = {
   message: 'This is my request message' #I've yet to figure out how to do the multi-part requests
 }
 couch_request = CS::Request.new(details)
+=end
 
 #api.requests(1).each do |key, value|
 #  pp value
 #end
+
+# ===
+#   Search for people in a city with various search constraints
+# ===
+options = {
+  location: 'venice',
+  gender: 'female',
+  :'has-photo' => false,
+  :'member-type' => 'host' ,
+  vouched: nil,
+  verified: nil,
+  network: nil,
+  :'min-age' => nil,
+  :'max-age' => nil,
+}
+results = api.search(options)
+results.each do |id, user|
+  puts "Found (UID:#{id}) #{user[:name]} in #{user[:location]} with a couch status of #{user[:status]} and a photo #{user[:pic]}\n\n"
+end

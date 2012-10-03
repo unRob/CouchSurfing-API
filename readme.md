@@ -8,9 +8,11 @@ See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/example.r
 
 ##Requirements
 * HTTParty
+* Nokogiri
 
 ##Installation
     gem install httparty 
+	gem install nokogiri
     git clone https://github.com/unRob/Couchsurfing-API
 
 
@@ -19,10 +21,10 @@ See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/example.r
 * Look up you current requests
 * Get a user's profile, pictures, friends, references
 * Create a new couchrequest, but **I have yet to figure out the correct way to address it! The request will most likely go to Casey, so BEWARE**
+* Search for users meeting specific criteria (location, can host, has photo, verified, minimum & maximum age, etc.)
 
 ##Roadmap
 
-* Look-up users
 * Reply to CouchRequests
 
 ##License
