@@ -4,7 +4,7 @@
 require './csapi.rb'
 
 begin
-  api = CS.new('username','password')
+  api = CS.new('unrob','calcetin')
 rescue CS::AuthError
   puts "Incorrect username or password"
   exit;
@@ -13,7 +13,7 @@ end
 # ===
 # Get a user's info, by default ours
 # ===
-profile = api.profile('205974')
+profile = api.profile()
 
 # ===
 # Get a user's photos, by default ours
@@ -34,7 +34,10 @@ references = api.references('205974')
 # Get the current user's recent requests
 # ===
 limit = 10
-requests = api.requests(limit)
+options = {
+  after: 'couchrequest_id', #return only requests with an id smaller than this one
+}
+requests = api.requests(limit, options)
 
 # ===
 # Create a new Couch Request
