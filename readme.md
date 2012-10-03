@@ -4,13 +4,20 @@ This is a simple CouchSurfing API
 This used to be a PHP app, but I just changed my mind and went with Ruby instead. I'll probably make a PHP version soon
 
 ##Example
-See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/example.rb)
+See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/examples/example.rb)
 
 ##Requirements
 * HTTParty
 * Nokogiri
 
 ##Installation
+
+As a gem:
+
+	gem install csapi
+	
+Or by hand:
+
     gem install httparty 
 	gem install nokogiri
     git clone https://github.com/unRob/Couchsurfing-API
@@ -26,6 +33,11 @@ See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/example.r
 ##Roadmap
 
 * Reply to CouchRequests
+
+## Contributors
+
+* [Peter Nosko](https://github.com/pnosko) - Search
+
 
 ##License
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
