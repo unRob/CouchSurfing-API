@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require_relative '../lib/csapi'
+require 'CSApi'
 
 begin
   api = CS::Api.new('username','password')
