@@ -38,6 +38,16 @@ limit = 10
 requests = api.requests(limit)
 
 # ===
+# Get the current user's inbox messages
+# ===
+messages_inbox = api.messages_inbox(limit)
+
+# ===
+# Get the current user's sent messages
+# ===
+messages_sent = api.messages_sent(limit)
+
+# ===
 # Create a new Couch Request
 # ===
 details = {
