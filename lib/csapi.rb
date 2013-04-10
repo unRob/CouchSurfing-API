@@ -26,9 +26,7 @@ module CS
       raise CS::AuthError.new("Could not login") if r.code != 200
       
       @cookies = []
-      r.headers['Set-Cookie'].split(/, (?!\d)/).each do |cookie|
-        key, value = cookie.split(';')[0].split('=')
-        @cookies = "#{key}=#{value}"
+      @cookies=r.headers['Set-Cookie'].split(/;/).first
       end
       
       data = JSON.parse r.body
@@ -61,6 +59,42 @@ module CS
 
     def request(id)
       url = "/couchrequests/#{id}"
+      r = self.class.get(url)
+      JSON.parse r.body
+    end
+    
+    def messages_inbox(limit=5)
+      url = "/users/#{@uid}/messages?type=inbox"
+      q = {
+          limit: limit
+      }
+      r = self.class.get(url, query:q)
+      messages = {}
+      response = JSON.parse r.body
+      response['object'].each do |req|
+        key = req[-9,9]
+        messages[key] = self.message(@uid,key)
+      end
+	  messages
+    end
+	
+	def messages_sent(limit=5)
+      url = "/users/#{@uid}/messages?type=sent"
+      q = {
+          limit: limit
+      }
+      r = self.class.get(url, query:q)
+      messages = {}
+      response = JSON.parse r.body
+      response['object'].each do |req|
+        key = req[-9,9]
+        messages[key] = self.message(@uid,key)
+      end
+	  messages
+    end
+		
+	def message(user,id)
+      url = "/users/#{user}/messages/#{id}"
       r = self.class.get(url)
       JSON.parse r.body
     end
