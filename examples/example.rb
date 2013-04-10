@@ -43,7 +43,7 @@ requests = api.requests(limit)
 messages_inbox = api.messages_inbox(limit)
 
 # ===
-# Get the current user's inbox messages
+# Get the current user's sent messages
 # ===
 messages_sent = api.messages_sent(limit)
 
