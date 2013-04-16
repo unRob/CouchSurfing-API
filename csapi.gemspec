@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = "Simple wrapper of couchsurfing.org API for accessing profile, friends, searching, etc."
   gem.summary       = "I have no idea what is this"
   gem.homepage      = "https://github.com/unRob/CouchSurfing-API"
+  gem.licenses      = ['WTFPL', 'GPLv2']
   gem.has_rdoc = false
 
   gem.files         = `git ls-files`.split($/)
