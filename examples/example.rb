@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require 'CSApi'
+require './lib/CSApi.rb'
+require 'pp'
 
 begin
   api = CS::Api.new('username','password')
@@ -15,37 +16,44 @@ end
 # ===
 profile = api.profile('205974')
 
-exit;
-# ===
-# Get a user's photos, by default ours
-# ===
+
+## ===
+## Get a user's photos, by default ours
+## ===
 photos = api.photos('205974')
 
-# ===
-# Get a user's friends, by default ours
-# ===
+## ===
+## Get a user's friends, by default ours
+## ===
 friends = api.friends('205974')
 
-# ===
-# Get a user's references, by default ours
-# ===
+## ===
+## Get a user's references, by default ours
+## ===
 references = api.references('205974')
 
-# ===
-# Get the current user's recent requests
-# ===
+## ===
+## Get the current user's recent requests
+## ===
 limit = 10
 requests = api.requests(limit)
 
 # ===
 # Get the current user's inbox messages
 # ===
-messages_inbox = api.messages_inbox(limit)
+m = api.messages('inbox', 1)
+pp m.count
 
-# ===
-# Get the current user's sent messages
-# ===
-messages_sent = api.messages_sent(limit)
+m.each do |m|
+  pp m
+end
+
+if m.has_more?
+  pp m.more.count
+else
+  pp "end of messages"
+end
+
 
 # ===
 # Create a new Couch Request
@@ -63,13 +71,13 @@ details = {
 }
 couch_request = CS::Request.new(details)
 
-#api.requests(1).each do |key, value|
-#  pp value
-#end
-
-# ===
-#   Search for people in a city with various search constraints
-# ===
+api.requests(1).each do |key, value|
+  pp value
+end
+#
+## ===
+##   Search for people in a city with various search constraints
+## ===
 options = {
   location: 'venice',
   gender: 'female',

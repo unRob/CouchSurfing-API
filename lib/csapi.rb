@@ -27,7 +27,7 @@ module CS
       
       @cookies = []
       @cookies=r.headers['Set-Cookie'].split(/;/).first
-      end
+      #end
       
       data = JSON.parse r.body
       @uid = data['url'].gsub(/[^\d]/, '')
@@ -63,38 +63,29 @@ module CS
       JSON.parse r.body
     end
     
-    def messages_inbox(limit=5)
-      url = "/users/#{@uid}/messages?type=inbox"
+    
+    def messages(type='inbox', limit=5, start=nil)
+      
+      types = ['inbox', 'sent'];
+      throw ArgumentError.new("Can't fetch messages of kind #{type}") if !types.include? type;
+      
+      url = "/users/#{@uid}/messages"
       q = {
-          limit: limit
+        type: type,
+        limit: limit
       }
-      r = self.class.get(url, query:q)
-      messages = {}
-      response = JSON.parse r.body
-      response['object'].each do |req|
-        key = req[-9,9]
-        messages[key] = self.message(@uid,key)
+      
+      if (start)
+        q[:start] = start
       end
-	  messages
-    end
-	
-	def messages_sent(limit=5)
-      url = "/users/#{@uid}/messages?type=sent"
-      q = {
-          limit: limit
-      }
-      r = self.class.get(url, query:q)
-      messages = {}
-      response = JSON.parse r.body
-      response['object'].each do |req|
-        key = req[-9,9]
-        messages[key] = self.message(@uid,key)
-      end
-	  messages
+      
+      r = self.class.get(url, query:q);
+      object = JSON.parse r.body
+      
+      return CS::Messages.new(object, q, self);      
     end
 		
-	def message(user,id)
-      url = "/users/#{user}/messages/#{id}"
+    def message(url)
       r = self.class.get(url)
       JSON.parse r.body
     end
@@ -173,6 +164,47 @@ module CS
 
   class APIError < StandardError
   end
+
+  class Messages
+    
+    @after = nil
+    @q = {}
+    @data = []
+    
+    def initialize(object, q, ref)
+      
+      @after = object['after'] if object.include? 'after';
+      @q = q;
+      @ref = ref
+      @data = object['object']
+    end
+    
+    def count
+      return @data.count
+    end
+    
+    def has_more?
+      return @after != nil
+    end
+    
+    def each
+      @data.each do |url|
+        yield @ref.message(url)
+      end
+    end
+    
+    def more
+      more = @ref.messages(@q[:type], @q[:limit], @after)
+      @data = more['object']
+      @after = more.include?('after') ?  more['after'] : nil; 
+      return self
+    end
+    
+    private
+    @ref = nil
+    
+  end
+
 
   class Request
     @api = nil
