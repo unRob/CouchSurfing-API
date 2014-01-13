@@ -1,7 +1,11 @@
 This is a simple CouchSurfing API
 =================================
 
-This used to be a PHP app, but I just changed my mind and went with Ruby instead. I'll probably make a PHP version soon
+This a non-official CS API client written in Ruby.
+
+Using this client will likely result in a **violation of [Couchsurfing's TOS](https://www.couchsurfing.org/n/terms)**. I have contacted the [tech team](https://support.couchsurfing.org/hc/en-us/requests/new?category=support) as well as the [twitter](https://twitter.com/couchsurfing) folks to ask for permission of any sort to use the API, but I've yet to hear back from them.
+
+The API was reverse-engineered, and if you'd like some pointers on that, please read [unRob/CouchSurfing-API#2](unRob/CouchSurfing-API#2).
 
 ##Example
 See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/examples/example.rb)
