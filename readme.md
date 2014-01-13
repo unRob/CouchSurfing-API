@@ -1,7 +1,7 @@
 This is a simple CouchSurfing API
 =================================
 
-This a non-official CS API client written in Ruby.
+This a unofficial CS API client written in Ruby.
 
 Using this client will likely result in a **violation of [Couchsurfing's TOS](https://www.couchsurfing.org/n/terms)**. I have contacted the [tech team](https://support.couchsurfing.org/hc/en-us/requests/new?category=support) as well as the [twitter](https://twitter.com/couchsurfing) folks to ask for permission of any sort to use the API, but I've yet to hear back from them.
 
