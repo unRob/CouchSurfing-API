@@ -8,16 +8,12 @@ module CS
       @data = data
     end
 
-    def each &block
-      @data.each &block
+    def method_missing meth, *args, &block
+      @data.send(meth.to_sym, *args, &block)
     end
 
     def next_page= proc
       @next_page = proc
-    end
-
-    def [](key)
-      @data[key]
     end
 
     def next_page
