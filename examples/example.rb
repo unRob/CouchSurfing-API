@@ -74,12 +74,12 @@ couch_request = CS::Request.new(details)
 api.requests(1).each do |key, value|
   pp value
 end
-#
+
 ## ===
 ##   Search for people in a city with various search constraints
 ## ===
 options = {
-  location: 'venice',
+  location: 'mexico city',
   gender: 'female',
   :'has-photo' => false,
   :'member-type' => 'host' ,
@@ -90,6 +90,9 @@ options = {
   :'max-age' => nil,
 }
 results = api.search(options)
+
 results.each do |id, user|
   puts "Found (UID:#{id}) #{user[:name]} in #{user[:location]} with a couch status of #{user[:status]} and a photo #{user[:pic]}\n\n"
 end
+
+puts results.next_page.values.first

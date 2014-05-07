@@ -10,6 +10,7 @@ Copyright (c) 2012 Partido Surrealista Mexicano
 require 'httparty'
 require 'json'
 require 'nokogiri'
+require File.dirname(__FILE__)+'/csapi/search.rb'
 module CS
     
   class Api
@@ -18,6 +19,7 @@ module CS
     headers "Content-Type" => 'application/json'
     follow_redirects false
     @uid = '0'
+    #debug_output $stderr
 
     def initialize(username, password)
       @username = username
@@ -146,6 +148,7 @@ module CS
       doc.xpath('//article').each do |article|
         id = article.at_css('a').attr('href').split('/').last
         user = {
+          string_id: article.attr('rel'),
           name: article.children.at_css("h2").content,
           location: article.children.at_css("div.location").content,
           status: statuses[article['class'].match(/couch-([A-Z])/)[1]],
@@ -153,8 +156,14 @@ module CS
         }
         users[id] = user
       end
-    
-      users;
+      
+      results = CS::SearchResults.new(users)
+      results.next_page = lambda {
+        options[:page] = (options[:page]||0)+1
+        options[:exclude_ids] = users.collect {|k, u| u[:string_id]}
+        search(options)
+      }
+      results
     end
   end
   
@@ -164,6 +173,15 @@ module CS
 
   class APIError < StandardError
   end
+
+
+  class Search
+
+    def initialize(options)
+    end
+
+  end
+
 
   class Messages
     
