@@ -9,7 +9,7 @@ module CS
       types = ['inbox', 'sent'];
       throw ArgumentError.new("Can't fetch messages of kind #{type}") unless types.include? type;
       
-      url = "/users/#{@uid}/messages"
+      url = "/users/#{CS::instance.uid}/messages"
       q = {
         type: type,
         limit: limit
@@ -19,7 +19,7 @@ module CS
         q[:start] = start
       end
       
-      r = HTTP.instance.get(url, query:q);
+      r = HTTP.get(url, query:q);
       object = JSON.parse r.body
       
       CS::Messages.new(object, q); 
@@ -29,10 +29,10 @@ module CS
     def initialize(object, q)
       @after = object['after'] if object.include? 'after';
       @q = q;
-      @data = object['object']
+      @data = object['object'].map {|u| Message.new(u) }
     end
     
-    
+
     def method_missing meth, *args, &block
       @data.send(meth.to_sym, *args, &block)
     end
@@ -43,13 +43,59 @@ module CS
     end
 
     
-    def more
-      more = CS::Messages.getMessages(@q[:type], @q[:limit], @after)
-      @data = more['object']
-      @after = more.include?('after') ?  more['after'] : nil; 
-      return self
+    def more limit=nil
+      Messages.getMessages(@q[:type], (limit || @q[:limit]), @after)
     end
     
+  end
+
+  class Message
+
+    @url = nil
+    @fetched = false
+    @data = nil
+    @vars = [:title, :message, :date, :user_is_sender, :is_unread, :user, :url, :couch_request]
+    #attr_accessor *@vars
+
+    def initialize(url)
+      @url = url
+      @fetched = false
+    end
+
+    def fetch
+      req = HTTP.get(@url)
+      @data = JSON.parse req.body
+    end
+
+    def to_h
+      fetch unless @fetched
+      @data
+    end
+
+    def date
+      fetch unless @fetched
+      Date.parse(@date)
+    end
+
+    def unread?
+      fetch unless @fetched
+      @is_unread
+    end
+
+    def is_sender?
+      fetch unless @fetched
+      @user_is_sender
+    end
+
+    def method_missing meth
+      if vars.include? meth
+        fetch unless @fetched
+        @data[meth.to_s]
+      else
+        raise ArgumentError.new
+      end
+    end
+
   end
 
 end

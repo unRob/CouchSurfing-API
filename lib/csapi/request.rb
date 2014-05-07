@@ -3,7 +3,7 @@ module CS
   class Request
     @api = nil
 
-    attr_accesor :subject, :number, :arrival_flexible, :departure_flexible, :is_open_couchrequest, :from, :to, :arrival, :departure, :message
+    attr_accessor :subject, :number, :arrival_flexible, :departure_flexible, :is_open_couchrequest, :from, :to, :arrival, :departure, :message
 
     @options = [:subject, :number, :arrival_flexible, :departure_flexible, :is_open_couchrequest, :from, :to, :arrival, :departure, :message]
 
@@ -59,7 +59,7 @@ module CS
       data[:from] ||= me
       data[:to] ||= me
 
-      CS::HTTP.instance.post('/couchrequests', body: data)
+      CS::HTTP.post('/couchrequests', body: data)
 
     end
 

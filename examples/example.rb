@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-require './lib/CSApi.rb'
+require_relative '../lib/CSApi.rb'
 require 'pp'
 
+user = ENV['USER'] || 'user'
+password = ENV['PASSWORD'] || 'password'
+
 begin
-  api = CS::Api.new('username','password')
+  api = CS::Api.new(user,password)
 rescue CS::AuthError
   puts "Incorrect username or password"
   exit
@@ -15,7 +18,6 @@ end
 # Get a user's info, by default ours
 # ===
 profile = api.profile('205974')
-
 
 ## ===
 ## Get a user's photos, by default ours
@@ -41,17 +43,17 @@ requests = api.requests(limit)
 # ===
 # Get the current user's inbox messages
 # ===
-m = api.messages('inbox', 1)
-pp m.count
+messages = api.messages('inbox', 1)
 
-m.each do |m|
-  pp m
+messages.each do |m|
+  puts m.to_h
 end
 
-if m.has_more?
-  pp m.more.count
+
+if messages.has_more?
+  p messages.more.count
 else
-  pp "end of messages"
+  p "end of messages"
 end
 
 
@@ -61,15 +63,15 @@ end
 details = {
   subject: 'This is my request subject',
   number: 1, #How many people travel with you
-  arrival: 1339543920, #a Unix Timestamp with your arrival date
-  departure: 1339643920, #a Unix Timestamp with your departure date
+  arrival: Time.at(1339543920), #a Time instance
+  departure: Time.at(1339643920), #a Time instance
   arrival_flexible: true,
   departure_flexible: false,
   is_open_couchrequest: false,
   to: 12345, #a numeric user id, I guess, have yet to figure this out ,
   message: 'This is my request message' #I've yet to figure out how to do the multi-part requests
 }
-couch_request = CS::Request.new(details)
+#couch_request = CS::Request.new(details)
 
 api.requests(1).each do |key, value|
   pp value
@@ -89,10 +91,11 @@ options = {
   :'min-age' => nil,
   :'max-age' => nil,
 }
-results = api.search(options)
+search = CS::CouchSearch.new(options)
+results = search.execute
 
 results.each do |id, user|
   puts "Found (UID:#{id}) #{user[:name]} in #{user[:location]} with a couch status of #{user[:status]} and a photo #{user[:pic]}\n\n"
 end
 
-puts results.next_page.values.first
+puts results.more.count
