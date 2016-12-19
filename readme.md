@@ -1,5 +1,10 @@
-This is a simple CouchSurfing API
-=================================
+# DEPRECATED
+
+This client is no longer supported due to breaking API changes and a lack of time to matain and adapt.
+If you'd like to take this over, do [get in touch](https://github.com/unRob/CouchSurfing-API/issues/new)!
+
+
+## This is a simple CouchSurfing API
 
 This a unofficial CS API client written in Ruby.
 
@@ -18,13 +23,17 @@ See [example.rb](https://github.com/unRob/CouchSurfing-API/blob/master/examples/
 
 As a gem:
 
-	gem install CSApi
+```
+gem install CSApi
+```
 	
 Or by hand:
 
-    gem install httparty 
-	gem install nokogiri
-    git clone https://github.com/unRob/Couchsurfing-API
+```
+gem install httparty 
+gem install nokogiri
+git clone https://github.com/unRob/Couchsurfing-API
+```
 
 
 ##Currently implemented features
