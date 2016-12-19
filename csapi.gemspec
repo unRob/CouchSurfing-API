@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = CS::VERSION
   gem.authors       = ["Roberto Hidalgo"]
   gem.email         = ["un@rob.mx"]
-  gem.description   = "Simple wrapper of couchsurfing.org API for accessing profile, friends, searching, etc."
+  gem.description   = "No longer working. Simple wrapper of couchsurfing.org API for accessing profile, friends, searching, etc."
   gem.summary       = "I have no idea what is this"
   gem.homepage      = "https://github.com/unRob/CouchSurfing-API"
   gem.licenses      = ['WTFPL', 'GPLv2']
@@ -18,10 +18,10 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
-  
-  
+
+
   gem.add_runtime_dependency 'httparty'
   gem.add_runtime_dependency 'json'
   gem.add_runtime_dependency 'nokogiri'
-  
+
 end

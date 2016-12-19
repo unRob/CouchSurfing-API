@@ -4,7 +4,7 @@
 =begin
 
 Licensed under The MIT License
-Copyright (c) 2012 Partido Surrealista Mexicano  
+Copyright (c) 2012 Partido Surrealista Mexicano
 =end
 
 require 'httparty'
@@ -18,7 +18,7 @@ require_relative 'csapi/request.rb'
 require_relative 'csapi/search.rb'
 
 module CS
-  
+
   @@instance = nil
 
   def self.instance
@@ -38,20 +38,21 @@ module CS
   end
 
   class Api
-    
+
     attr_accessor :uid;
     @uid = '0'
-    
+
     def initialize(username, password)
       @username = username
       r = HTTP.post('/sessions', body:{username: username, password: password}.to_json)
-      
+
+      raise CS::APIError.new('Unsupported API version') if r.headers['X-CS-Error'] == 'clientVersionNotSupportedAnymore'
       raise CS::AuthError.new("Could not login") if r.code != 200
-      
+
       @cookies = []
       @cookies=r.headers['Set-Cookie'].split(/;/).first
       #end
-      
+
       data = JSON.parse r.body
       @uid = data['url'].gsub(/[^\d]/, '')
       @profile = data.keep_if {|k,v| ['realname', 'username', 'profile_image', 'gender', 'address'].include?(k)}
@@ -82,12 +83,12 @@ module CS
       r = HTTP.get(url)
       JSON.parse r.body
     end
-    
-    
+
+
     def messages(*args)
       CS::Messages.getMessages(*args)
     end
-    
+
 
     def message(url)
       r = HTTP.get(url)
@@ -129,7 +130,7 @@ module CS
 
 
     def search(options)
-      
+
       defaults = {
         location: nil,
         gender: nil,
@@ -142,9 +143,9 @@ module CS
         :'max-age' => nil,
         :platform => 'android'
       }
-    
-      
+
+
     end
   end
-  
+
 end
